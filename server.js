@@ -1,19 +1,18 @@
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
-const { marked } = require('marked');
+const MarkdownIt = require('markdown-it');
+const md = new MarkdownIt();
+
 const app = express();
 
-// 정적 파일 제공
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-// 메인 페이지
 app.get('/', (req, res) => {
   res.render('index');
 });
 
-// md 파일 목록 조회
 app.get('/api/files', async (req, res) => {
   try {
     const files = await fs.readdir('./markdown');
@@ -24,27 +23,20 @@ app.get('/api/files', async (req, res) => {
   }
 });
 
-// md 파일 내용 조회
 app.get('/api/files/:filename', async (req, res) => {
   try {
     const filename = decodeURIComponent(req.params.filename);
     const filePath = path.join('./markdown', filename);
-    console.log('Attempting to read file:', filePath);
     const content = await fs.readFile(filePath, 'utf-8');
-    
-    // Mermaid를 처리하기 위한 renderer 설정
-    const renderer = new marked.Renderer();
-    renderer.code = (code, language) => {
-      if (language === 'mermaid') {
-        return `<div class="mermaid">${code}</div>`;
-      }
-      return `<pre><code>${code}</code></pre>`;
-    };
 
-    const htmlContent = marked(content, { renderer });
-    res.json({ content: htmlContent });
+    // Mermaid 코드 블록 감지 및 변환
+    const renderedHTML = md.render(content).replace(
+      /<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g,
+      (match, mermaidCode) => `<div class="mermaid">${mermaidCode.trim()}</div>`
+    );
+
+    res.json({ content: renderedHTML });
   } catch (error) {
-    console.error('Error reading file:', error);
     res.status(500).json({ 
       error: `Failed to read file: ${error.message}`,
       details: error.stack 

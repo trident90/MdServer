@@ -16,11 +16,10 @@
     </div>
   </div>
   <script>
-    // MutationObserver를 사용하여 DOM 변경 감지
     const observer = new MutationObserver(() => {
       const mermaidElements = document.querySelectorAll('.mermaid');
       if (mermaidElements.length > 0) {
-        mermaid.init(undefined, mermaidElements); // Mermaid 초기화
+        mermaid.init(undefined, mermaidElements);
       }
     });
 
