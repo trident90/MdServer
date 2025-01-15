@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.file-list {
+  width: 400px;
+  padding: 20px;
+  border-right: 1px solid #ccc;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.error {
+  color: red;
+  padding: 10px;
+  border: 1px solid red;
+  background-color: #fff3f3;
+  border-radius: 4px;
+}
