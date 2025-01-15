@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 const MarkdownIt = require('markdown-it');
-const md = new MarkdownIt();
+const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
 
 const app = express();
 
@@ -29,7 +29,7 @@ app.get('/api/files/:filename', async (req, res) => {
     const filePath = path.join('./markdown', filename);
     const content = await fs.readFile(filePath, 'utf-8');
 
-    // Mermaid 코드 블록 감지 및 변환
+    // Markdown 렌더링 및 Mermaid 코드 처리
     const renderedHTML = md.render(content).replace(
       /<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g,
       (match, mermaidCode) => `<div class="mermaid">${mermaidCode.trim()}</div>`
