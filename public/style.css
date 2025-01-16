@@ -1,17 +1,37 @@
+/* 기본 폰트 스타일을 sans-serif로 설정 */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
+  color: #333;
+}
+
+/* 컨테이너 스타일 */
 .container {
   display: flex;
   min-height: 100vh;
 }
 
+/* 파일 목록 스타일 */
 .file-list {
   width: 400px;
   padding: 20px;
   border-right: 1px solid #ccc;
+  background-color: #fff;
 }
 
+.file-list h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* 콘텐츠 영역 */
 .content {
   flex: 1;
   padding: 20px;
+  background-color: #fff;
 }
 
 .error {
@@ -22,25 +42,65 @@
   border-radius: 4px;
 }
 
+pre {
+  /* background: #2d2d2d; */
+  background: #fff;
+  color: #f8f8f2;
+  padding: 0px;
+  overflow-x: auto;
+}
+
+code {
+  font-family: 'Courier New', monospace;
+}
+
+/* 코드 블록 내 키워드 강조 */
+.hljs-keyword {
+  color: #ff79c6;
+}
+
+.hljs-string {
+  color: #f1fa8c;
+}
+
+.hljs-comment {
+  color: #6272a4;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
+  margin: 10px 0 15px 0;
   font-size: 16px;
   text-align: left;
+  display: block;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 table thead tr {
   background-color: #f4f4f4;
   color: #333;
   font-weight: bold;
+  vertical-align: middle;
 }
 
-table th, table td {
+table th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+table td {
   border: 1px solid #ddd;
   padding: 10px;
 }
 
 table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
+}
+
+.mermaid {
+  background-color: #fff;
+  text-align: left;
+  margin: 20px auto;
 }

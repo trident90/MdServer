@@ -27,8 +27,15 @@ async function loadContent(filename) {
   } else {
     contentDiv.innerHTML = data.content;
 
+    // Mermaid 코드 먼저 초기화
+    initializeMermaid();
+        
+    // Mermaid가 적용된 이후 코드 하이라이트 적용
+    setTimeout(() => {
+      initializeHighlightJS();
+    }, 100);
     // Mermaid 초기화
-    mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+    //mermaid.init(undefined, document.querySelectorAll('.mermaid'));
   }
 }
 

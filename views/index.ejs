@@ -3,6 +3,8 @@
 <head>
   <title>Markdown Viewer</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 </head>
 <body>
@@ -16,11 +18,32 @@
     </div>
   </div>
   <script>
-    const observer = new MutationObserver(() => {
+    /*
+    function initializeMermaid() {
       const mermaidElements = document.querySelectorAll('.mermaid');
       if (mermaidElements.length > 0) {
         mermaid.init(undefined, mermaidElements);
       }
+    }
+    */
+    function initializeMermaid() {
+      mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+    }
+
+    function initializeHighlightJS() {
+      document.querySelectorAll('pre code').forEach((block) => {
+        // Mermaid 코드 블록은 highlight.js에서 제외
+        if (!block.classList.contains('language-mermaid')) {
+          hljs.highlightElement(block);
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadFiles);
+    /*
+    const observer = new MutationObserver(() => {
+      //initializeHighlightJS();
+      initializeMermaid();
     });
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -28,6 +51,7 @@
       const targetNode = document.getElementById('markdownContent');
       observer.observe(targetNode, { childList: true, subtree: true });
     });
+    */
   </script>
   <script src="/script.js"></script>
 </body>
