@@ -9,23 +9,15 @@
 </head>
 <body>
   <div class="container">
-    <div class="file-list">
-      <h2>Files</h2>
-      <ul id="fileList"></ul>
+    <div class="file-list-container">
+      <div class="file-list-title">File List</div>
+      <div class="file-list" id="fileList"></div>
     </div>
     <div class="content">
       <div id="markdownContent"></div>
     </div>
   </div>
   <script>
-    /*
-    function initializeMermaid() {
-      const mermaidElements = document.querySelectorAll('.mermaid');
-      if (mermaidElements.length > 0) {
-        mermaid.init(undefined, mermaidElements);
-      }
-    }
-    */
     function initializeMermaid() {
       mermaid.init(undefined, document.querySelectorAll('.mermaid'));
     }
@@ -40,18 +32,6 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadFiles);
-    /*
-    const observer = new MutationObserver(() => {
-      //initializeHighlightJS();
-      initializeMermaid();
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      loadFiles();
-      const targetNode = document.getElementById('markdownContent');
-      observer.observe(targetNode, { childList: true, subtree: true });
-    });
-    */
   </script>
   <script src="/script.js"></script>
 </body>

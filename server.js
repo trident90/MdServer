@@ -12,6 +12,9 @@ const md = new MarkdownIt({
     if (lang === 'mermaid') {
       return `<div class="mermaid">${str}</div>`;  // Mermaid를 먼저 처리
     }
+    if (lang === 'yaml' || lang === 'yml') {
+      return `<pre><code class="hljs language-yaml">${hljs.highlight(str, { language: 'yaml' }).value}</code></pre>`;
+    }
     if (lang && hljs.getLanguage(lang)) {
       try {
         return `<pre><code class="hljs">${hljs.highlight(str, { language: lang }).value}</code></pre>`;
@@ -34,8 +37,8 @@ app.get('/', (req, res) => {
 app.get('/api/files', async (req, res) => {
   try {
     const files = await fs.readdir('./markdown');
-    const mdFiles = files.filter(file => path.extname(file) === '.md');
-    res.json(mdFiles);
+    const validFiles = files.filter(file => ['.md', '.yaml', '.yml'].includes(path.extname(file)));
+    res.json(validFiles);
   } catch (error) {
     res.status(500).json({ error: 'Failed to read directory' });
   }
@@ -47,20 +50,16 @@ app.get('/api/files/:filename', async (req, res) => {
     const filePath = path.join('./markdown', filename);
     const content = await fs.readFile(filePath, 'utf-8');
 
-    // Markdown 렌더링 (Mermaid 지원)
-    let renderedHTML = md.render(content);
-
-    // Mermaid 코드 블록 감지 및 변환
-    /*
-    renderedHTML = renderedHTML.replace(
-      /<pre><code class="hljs language-mermaid">([\s\S]*?)<\/code><\/pre>/g,
-      (match, mermaidCode) => `<div class="mermaid">${mermaidCode.trim()}</div>`
-    );
-    const renderedHTML = md.render(content).replace(
-      /<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g,
-      (match, mermaidCode) => `<div class="mermaid">${mermaidCode.trim()}</div>`
-    );
-    */
+    let renderedHTML;
+    if (filename.endsWith('.md')) {
+      // 🔹 Markdown 파일 렌더링
+      renderedHTML = md.render(content);
+    } else if (filename.endsWith('.yaml') || filename.endsWith('.yml')) {
+      // 🔹 YAML 파일은 코드 블록으로 감싸서 표시
+      renderedHTML = `<pre><code class="hljs language-yaml">${hljs.highlight(content, { language: 'yaml' }).value}</code></pre>`;
+    } else {
+      throw new Error("Unsupported file format");
+    }
 
     res.json({ content: renderedHTML });
   } catch (error) {
